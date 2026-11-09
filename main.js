@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 2. Licznik czasu (aktualizuje tylko to, co się zmieniło, i tylko gdy karta jest widoczna)
-    const startDate = new Date("2024-02-14T00:00:00").getTime();
+    const startDate = new Date("2026-11-20T00:00:00").getTime();
     const daysEl = document.getElementById('days');
     const hoursEl = document.getElementById('hours');
     const minsEl = document.getElementById('minutes');
