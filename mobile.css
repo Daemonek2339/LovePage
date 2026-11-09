@@ -1,0 +1,163 @@
+/* mobile.css — styl włączany TYLKO na telefonach.
+   Jest podpięty w HTML przez:
+   <link rel="stylesheet" href="mobile.css" media="(max-width: 768px), (max-height: 500px) and (pointer: coarse)">
+   Na komputerze (szerokie okno) przeglądarka go pomija, więc nic tam nie zmienia.
+   Ładuj go ZAWSZE po style.css. */
+
+:root {
+    --bar-h: 66px; /* wysokość dolnego paska z licznikiem */
+    --safe-t: env(safe-area-inset-top, 0px);
+    --safe-b: env(safe-area-inset-bottom, 0px);
+    --safe-l: env(safe-area-inset-left, 0px);
+    --safe-r: env(safe-area-inset-right, 0px);
+}
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+    overscroll-behavior: none;               /* bez "odświeżania" i gumowego odbijania strony */
+    -webkit-tap-highlight-color: transparent; /* bez szarego błysku po dotknięciu */
+    touch-action: manipulation;              /* bez opóźnienia i zoomu przy podwójnym dotknięciu */
+}
+
+/* --- Przyciski: reakcja na dotyk zamiast :hover --- */
+button { font-size: 1rem; padding: 11px 26px; }
+button:active { background: var(--neon-pink); box-shadow: 0 0 20px var(--neon-pink); }
+.btn-subtle { font-size: 0.9rem; padding: 10px 20px; }
+.btn-subtle:active { background: var(--neon-purple); box-shadow: 0 0 15px var(--neon-purple); }
+.player-btn:active { text-shadow: 0 0 20px var(--neon-pink); transform: scale(1.12); }
+.neon-button { font-size: 1.1rem; padding: 14px 34px; margin-top: 28px; }
+
+/* --- Ekran logowania --- */
+.screen { padding: 16px 16px 22vh; padding-bottom: 22dvh; } /* box wyżej, żeby klawiatura go nie zasłaniała */
+.neon-box { padding: 28px 20px; }
+.neon-text { font-size: 2.4rem; margin-bottom: 20px; }
+#login-screen .neon-box { width: 100%; max-width: 380px; }
+input[type="password"] { margin-bottom: 20px; }
+.login-actions button { flex: 1 1 120px; }
+
+/* --- Układ strony głównej: nawigacja / treść / pasek licznika (bez ręcznych odstępów) --- */
+body.page-main { display: flex; flex-direction: column; }
+
+.neon-nav {
+    position: static; flex: 0 0 auto; flex-direction: column; align-items: stretch; gap: 2px;
+    padding: calc(8px + var(--safe-t)) calc(8px + var(--safe-r)) 4px calc(8px + var(--safe-l));
+    background: rgba(9, 0, 20, 0.96);
+}
+.nav-brand { font-size: 1.35rem; line-height: 1.2; text-align: center; letter-spacing: 1px; }
+.nav-links {
+    justify-content: flex-start; gap: 8px; padding: 6px 14px 8px;
+    overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+}
+.nav-links::-webkit-scrollbar { display: none; }
+@supports (justify-content: safe center) { .nav-links { justify-content: safe center; } }
+.nav-links a { flex: 0 0 auto; padding: 7px 14px; font-size: 0.72rem; letter-spacing: 0.5px; white-space: nowrap; }
+
+#main-content { position: relative; flex: 1 1 0; min-height: 0; height: auto; padding: 0; }
+section { max-width: 100%; max-height: 100%; padding: 16px 14px 24px; overscroll-behavior: contain; }
+
+/* --- Licznik jako dolny pasek --- */
+#persistent-counter {
+    order: 3; flex: 0 0 auto; position: relative; top: auto; left: auto; bottom: auto; transform: none;
+    width: 100%; height: calc(var(--bar-h) + var(--safe-b)); z-index: 800;
+    padding: 6px calc(12px + var(--safe-r)) var(--safe-b) calc(12px + var(--safe-l));
+    border-radius: 16px 16px 0 0; background: rgba(15, 0, 25, 0.96);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+.counter-label { font-size: 0.6rem; letter-spacing: 1px; margin-bottom: 3px; }
+#counter { gap: 14px; }
+.time-unit { font-size: 0.6rem; align-items: center; }
+.time-unit span { font-size: 1.35rem; line-height: 1.1; }
+
+/* --- Napisy i sekcje --- */
+.neon-text-mega { font-size: clamp(2.3rem, 11.5vw, 3.4rem); line-height: 1.15; margin-bottom: 12px; }
+.hero-subtitle { font-size: 1rem; letter-spacing: 1px; padding: 0 6px; }
+.neon-text-sub { font-size: 1.55rem; margin-bottom: 22px; }
+
+/* Galeria: 2 kolumny (na wąskim ekranie "photo-wide" w siatce auto-fit rozpychało stronę w bok) */
+.gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: clamp(110px, 30vw, 160px); grid-auto-flow: dense; gap: 10px; }
+.photo-placeholder { height: auto; padding: 8px; border-radius: 12px; font-size: 0.85rem; }
+
+/* Karty "Za co Cię uwielbiam" — odwracają się dotknięciem (obsługa w main.js) */
+.cards-container { gap: 14px; }
+.flip-card { width: 100%; max-width: 340px; height: 150px; }
+.flip-card-front, .flip-card-back { padding: 14px; }
+.flip-card-front { font-size: 1.25rem; }
+.flip-card-back { font-size: 0.98rem; line-height: 1.45; }
+
+/* Bucket list — większe pola dotykowe */
+.bucket-list { padding: 18px 16px; gap: 4px; }
+.dream-item { min-height: 48px; font-size: 1.02rem; gap: 14px; }
+.custom-checkbox { flex: 0 0 auto; width: 28px; height: 28px; }
+
+/* Odtwarzacz */
+.player-container { padding: 20px 16px; gap: 18px; }
+.player-top { gap: 16px; }
+.vinyl-record { width: 64px; height: 64px; }
+.vinyl-center { width: 20px; height: 20px; border-width: 3px; }
+.track-info { min-width: 0; }
+#track-name { font-size: 1.2rem; overflow: hidden; text-overflow: ellipsis; }
+.progress-wrapper { gap: 10px; font-size: 0.75rem; }
+.time-display { min-width: 34px; }
+.progress-bar-container { height: 12px; } /* grubszy pasek łatwiej trafić palcem */
+.controls { gap: 18px; }
+.player-btn { width: 56px; height: 56px; font-size: 1.8rem; }
+.play-main { width: 72px; height: 72px; font-size: 2.6rem !important; }
+
+/* Lightbox */
+.lightbox-content { width: 92vw; height: 72vh; height: 72dvh; padding: 20px 16px; }
+#lightbox-img-placeholder { font-size: 1.1rem; text-align: center; padding: 12px; margin-bottom: 14px; }
+#lightbox-title { font-size: 1.7rem; text-align: center; }
+#close-lightbox { top: calc(10px + var(--safe-t)); right: calc(12px + var(--safe-r)); width: 48px; height: 48px; font-size: 2.4rem; line-height: 1; }
+
+/* List — przewijany tekst, nagłówek i podpis zostają na miejscu */
+.letter-wrapper { width: 92%; }
+.letter-content { padding: 30px 20px 22px; border-radius: 16px; }
+.letter-header { font-size: 2.2rem; margin-bottom: 14px; }
+.letter-body {
+    font-size: 1.02rem; line-height: 1.65; margin-bottom: 18px; padding-right: 4px;
+    max-height: calc(100vh - 300px); max-height: calc(100dvh - 300px); min-height: 90px;
+    overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; -webkit-overflow-scrolling: touch;
+}
+.letter-body p { margin-bottom: 12px; }
+.letter-signature { font-size: 1.8rem; }
+#close-letter-btn { top: 8px; right: 8px; width: 42px; height: 42px; font-size: 1.6rem; }
+
+/* Kotek nad paskiem licznika */
+#neon-cat { right: calc(12px + var(--safe-r)); bottom: calc(var(--bar-h) + var(--safe-b) + 10px); font-size: 2rem; }
+.cat-message { left: auto; right: 0; top: -36px; font-size: 0.85rem; white-space: nowrap; padding: 4px 12px; }
+
+/* Najmniejsze telefony */
+@media (max-width: 360px) {
+    .nav-brand { font-size: 1.2rem; }
+    .neon-text { font-size: 2.1rem; }
+    .neon-text-sub { font-size: 1.4rem; }
+    #counter { gap: 10px; }
+    .letter-header { font-size: 1.9rem; }
+}
+
+/* Telefon poziomo: niska wysokość, więc wszystko ciaśniej */
+@media (orientation: landscape) and (max-height: 500px) {
+    :root { --bar-h: 44px; }
+    .neon-nav { flex-direction: row; align-items: center; gap: 10px; padding: 4px calc(10px + var(--safe-r)) 4px calc(10px + var(--safe-l)); }
+    .nav-brand { font-size: 1.1rem; white-space: nowrap; }
+    .nav-links { flex: 1; min-width: 0; padding: 4px 14px; }
+    #persistent-counter { flex-direction: row; gap: 14px; padding-top: 0; border-radius: 12px 12px 0 0; }
+    .counter-label { margin: 0; }
+    #counter { gap: 10px; }
+    .time-unit { flex-direction: row; align-items: baseline; gap: 2px; }
+    .time-unit span { font-size: 1.05rem; }
+    section { padding: 12px 14px 16px; }
+    .neon-text-mega { font-size: 2.4rem; }
+    .neon-text-sub { font-size: 1.3rem; margin-bottom: 12px; }
+    .gallery-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 100px; }
+    .flip-card { height: 120px; }
+    .screen { padding-bottom: 16px; justify-content: center; }
+    .lightbox-content { height: 84vh; height: 84dvh; }
+    .letter-content { padding: 16px 20px; }
+    .letter-header { font-size: 1.6rem; margin-bottom: 8px; }
+    .letter-body { max-height: calc(100vh - 170px); max-height: calc(100dvh - 170px); margin-bottom: 8px; font-size: 0.95rem; }
+    .letter-signature { font-size: 1.3rem; }
+}
