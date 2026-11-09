@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(createHeart, HEART_INTERVAL);
 
     // 4. Odtwarzacz muzyczny
-    const songs = ['piosenka1.mp3', 'piosenka2.mp3'];
+    const songs = ['Bedoes & Lanek - 1998 (mam to we krwi).mp3', 'Bedoes - VOGUE.mp3'];
     let songIndex = 0;
     let isPlaying = false;
     const audio = new Audio();
